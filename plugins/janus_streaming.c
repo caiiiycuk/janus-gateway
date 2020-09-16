@@ -699,6 +699,8 @@ rtspiface = network interface IP address or device name to listen on when receiv
 
 #include <jansson.h>
 
+#include "jsdos/data-pipe.h"
+
 #ifdef HAVE_LIBCURL
 #include <curl/curl.h>
 #ifndef CURL_AT_LEAST_VERSION
@@ -747,6 +749,7 @@ json_t *janus_streaming_handle_admin_message(json_t *message);
 void janus_streaming_setup_media(janus_plugin_session *handle);
 void janus_streaming_incoming_rtp(janus_plugin_session *handle, janus_plugin_rtp *packet);
 void janus_streaming_incoming_rtcp(janus_plugin_session *handle, janus_plugin_rtcp *packet);
+void janus_streaming_incoming_data(janus_plugin_session *handle, janus_plugin_data *packet);
 void janus_streaming_data_ready(janus_plugin_session *handle);
 void janus_streaming_hangup_media(janus_plugin_session *handle);
 void janus_streaming_destroy_session(janus_plugin_session *handle, int *error);
@@ -773,6 +776,7 @@ static janus_plugin janus_streaming_plugin =
 		.setup_media = janus_streaming_setup_media,
 		.incoming_rtp = janus_streaming_incoming_rtp,
 		.incoming_rtcp = janus_streaming_incoming_rtcp,
+    .incoming_data = janus_streaming_incoming_data,
 		.data_ready = janus_streaming_data_ready,
 		.hangup_media = janus_streaming_hangup_media,
 		.destroy_session = janus_streaming_destroy_session,
@@ -1556,6 +1560,7 @@ static void janus_streaming_rtcp_remb_send(janus_streaming_rtp_source *source) {
 
 /* Plugin implementation */
 int janus_streaming_init(janus_callbacks *callback, const char *config_path) {
+    jsdos_data_pipe_init();
 #ifdef HAVE_LIBCURL
 	curl_global_init(CURL_GLOBAL_ALL);
 #else
@@ -2212,6 +2217,7 @@ int janus_streaming_init(janus_callbacks *callback, const char *config_path) {
 }
 
 void janus_streaming_destroy(void) {
+	jsdos_data_pipe_destroy();
 	if(!g_atomic_int_get(&initialized))
 		return;
 	g_atomic_int_set(&stopping, 1);
@@ -4453,6 +4459,19 @@ void janus_streaming_incoming_rtcp(janus_plugin_session *handle, janus_plugin_rt
 				source->lowest_bitrate = bw;
 		}
 	}
+}
+
+void janus_streaming_incoming_data(janus_plugin_session *handle, janus_plugin_data *packet) {
+	if(handle == NULL || handle->stopped || g_atomic_int_get(&stopping) || !g_atomic_int_get(&initialized))
+		return;
+	if(packet->binary) {
+		/* We don't support binary data in the TextRoom plugin, it has to be text */
+		JANUS_LOG(LOG_ERR, "Binary data received, dropping...\n");
+		return;
+	}
+	char *buf = packet->buffer;
+	uint16_t len = packet->length;
+	jsdos_data_pipe_write(CHANNEL_PIPE, buf, len);
 }
 
 void janus_streaming_data_ready(janus_plugin_session *handle) {

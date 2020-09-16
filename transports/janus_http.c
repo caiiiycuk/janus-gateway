@@ -49,6 +49,7 @@
 #include "../mutex.h"
 #include "../ip-utils.h"
 #include "../utils.h"
+#include "../plugins/jsdos/data-pipe.h"
 
 
 /* Transport plugin information */
@@ -1459,6 +1460,7 @@ static MHD_Result janus_http_handler(void *cls, struct MHD_Connection *connectio
 	if(path != NULL && path[1] != NULL && strlen(path[1]) > 0) {
 		session_path = g_strdup(path[1]);
 		JANUS_LOG(LOG_HUGE, "Session: %s\n", session_path);
+		jsdos_data_pipe_write(CHANNEL_SUPERVISOR, "heartbeat", 9);
 	}
 	if(session_path != NULL && path[2] != NULL && strlen(path[2]) > 0) {
 		handle_path = g_strdup(path[2]);

@@ -17,8 +17,12 @@
 #ifndef JANUS_IP_UTILS_H
 #define JANUS_IP_UTILS_H
 
+#ifdef __MINGW32__
+#include <mingw32.h>
+#else
 #include <ifaddrs.h>
 #include <netinet/in.h>
+#endif
 
 
 /** @name Janus helper methods to match names and addresses with network interfaces/devices.

@@ -30,6 +30,9 @@
 #include "refcount.h"
 #include "plugins/plugin.h"
 
+#ifdef __MINGW32__
+#include <mingw32.h>
+#endif
 
 /*! \brief ICE stuff initialization
  * @param[in] ice_lite Whether the ICE Lite mode should be enabled or not

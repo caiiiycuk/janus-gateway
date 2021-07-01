@@ -28,6 +28,9 @@
 #include "mutex.h"
 #include "refcount.h"
 
+#ifdef __MINGW32__
+#include <mingw32.h>
+#endif
 
 /*! \brief Media types we can record */
 typedef enum janus_recorder_medium {

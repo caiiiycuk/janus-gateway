@@ -17,7 +17,9 @@
 #include <sys/file.h>
 #include <sys/types.h>
 #include <unistd.h>
+#ifndef __MINGW32__
 #include <arpa/inet.h>
+#endif
 #include <inttypes.h>
 
 #include <zlib.h>
@@ -28,6 +30,11 @@
 
 #if __MACH__
 #include "mach_gettime.h"
+#endif
+
+#ifdef __MINGW32__
+#include <mingw32.h>
+#define mkdir g_mkdir
 #endif
 
 gint64 janus_get_monotonic_time(void) {

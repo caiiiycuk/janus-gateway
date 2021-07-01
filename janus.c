@@ -17,14 +17,31 @@
 
 #include <dlfcn.h>
 #include <dirent.h>
+
+#ifdef __MINGW32__
+#include <winsock2.h>
+#include <windows.h>
+#include <glib/gstdio.h>
+#include <gio/gnetworking.h>
+#else
 #include <net/if.h>
 #include <netdb.h>
+#endif
+
 #include <signal.h>
 #include <getopt.h>
+
+#ifndef __MINGW32__
 #include <sys/resource.h>
+#endif
+
 #include <sys/stat.h>
 #include <fcntl.h>
+
+#ifndef __MINGW32__
 #include <poll.h>
+#endif
+
 #ifdef HAVE_TURNRESTAPI
 #include <curl/curl.h>
 #endif
@@ -41,6 +58,10 @@
 #include "record.h"
 #include "events.h"
 
+#ifdef __MINGW32__
+#include <openssl/err.h>
+#include <openssl/ssl.h>
+#endif
 
 #define JANUS_NAME				"Janus WebRTC Server"
 #define JANUS_AUTHOR			"Meetecho s.r.l."
@@ -4035,10 +4056,12 @@ gboolean janus_plugin_auth_signature_contains(janus_plugin *plugin, const char *
 /* Main */
 gint main(int argc, char *argv[])
 {
-	/* Core dumps may be disallowed by parent of this process; change that */
+#ifndef __MINGW32__
+    /* Core dumps may be disallowed by parent of this process; change that */
 	struct rlimit core_limits;
 	core_limits.rlim_cur = core_limits.rlim_max = RLIM_INFINITY;
 	setrlimit(RLIMIT_CORE, &core_limits);
+#endif
 
 	g_print("Janus commit: %s\n", janus_build_git_sha);
 	g_print("Compiled on:  %s\n\n", janus_build_git_time);

@@ -14,12 +14,15 @@
  * \ref protocols
  */
 
+#ifndef __MINGW32__
 #include <ifaddrs.h>
 #include <poll.h>
 #include <net/if.h>
 #include <sys/socket.h>
-#include <sys/time.h>
 #include <netdb.h>
+#endif
+
+#include <sys/time.h>
 #include <fcntl.h>
 #include <stun/usages/bind.h>
 #include <nice/debug.h>

@@ -678,7 +678,9 @@ gboolean janus_config_save(janus_config *config, const char *folder, const char 
 	char date[64], header[256];
 	struct tm tmresult;
 	time_t ltime = time(NULL);
+#ifndef __MINGW32__
 	localtime_r(&ltime, &tmresult);
+#endif
 	strftime(date, sizeof(date), "%a %b %e %T %Y", &tmresult);
 	char comment = config->is_jcfg ? '#' : ';';
 	g_snprintf(header, 256, "%c\n%c File automatically generated on %s\n%c\n\n",

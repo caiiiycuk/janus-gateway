@@ -12,17 +12,25 @@
  */
 
 #include <errno.h>
+#ifndef __MINGW32__
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <net/if.h>
+#else
+#include <stdint.h>
+#endif
 #include <string.h>
 #include <unistd.h>
 
 #include <glib.h>
 
 #include "ip-utils.h"
+
+#ifdef __MINGW32__
+#include <mingw32.h>
+#endif
 
 static int janus_ip_compare_byte_arrays(const uint8_t *b1, const uint8_t *b2, const size_t size) {
 	size_t i;

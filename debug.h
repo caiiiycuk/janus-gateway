@@ -85,6 +85,31 @@ static const char *janus_log_prefix[] = {
 /*! \brief Logger based on different levels, which can either be displayed
  * or not according to the configuration of the server.
  * The format must be a string literal. */
+#ifdef __MINGW32__
+#define JANUS_LOG(level, format, ...) \
+do { \
+	if (level > LOG_NONE && level <= LOG_MAX && level <= janus_log_level) { \
+		char janus_log_ts[64] = ""; \
+		char janus_log_src[128] = ""; \
+		if (janus_log_timestamps) { \
+			struct tm janustmresult; \
+			strftime(janus_log_ts, sizeof(janus_log_ts), \
+			         "[%a %b %e %T %Y] ", &janustmresult); \
+		} \
+		if (level == LOG_FATAL || level == LOG_ERR || level == LOG_DBG) { \
+			snprintf(janus_log_src, sizeof(janus_log_src), \
+			         "[%s:%s:%d] ", __FILE__, __FUNCTION__, __LINE__); \
+		} \
+		JANUS_PRINT("%s%s%s%s" format, \
+			janus_log_global_prefix ? janus_log_global_prefix : "", \
+			janus_log_ts, \
+			janus_log_prefix[level | ((int)janus_log_colors << 3)], \
+			janus_log_src, \
+			##__VA_ARGS__); \
+	} \
+} while (0)
+///@}
+#else
 #define JANUS_LOG(level, format, ...) \
 do { \
 	if (level > LOG_NONE && level <= LOG_MAX && level <= janus_log_level) { \
@@ -110,5 +135,6 @@ do { \
 	} \
 } while (0)
 ///@}
+#endif
 
 #endif

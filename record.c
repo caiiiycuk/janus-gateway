@@ -17,7 +17,10 @@
  * \ref core
  */
 
+#ifndef __MINGW32__
 #include <arpa/inet.h>
+#endif
+
 #include <sys/stat.h>
 #include <errno.h>
 #include <libgen.h>

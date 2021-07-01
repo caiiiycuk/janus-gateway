@@ -19,6 +19,10 @@
 #include "utils.h"
 #include "debug.h"
 
+#ifdef __MINGW32__
+#include <mingw32.h>
+#endif
+
 #define JANUS_BUFSIZE	8192
 
 /* Preferred codecs when negotiating audio/video, and number of supported codecs */

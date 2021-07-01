@@ -35,7 +35,10 @@
 
 #include <errno.h>
 #include <sys/time.h>
+
+#ifndef __MINGW32__
 #include <arpa/inet.h>
+
 #ifdef __MACH__
 #include <machine/endian.h>
 #define __BYTE_ORDER BYTE_ORDER
@@ -48,6 +51,8 @@
 #define __LITTLE_ENDIAN LITTLE_ENDIAN
 #else
 #include <endian.h>
+#endif
+
 #endif
 
 #include "text2pcap.h"

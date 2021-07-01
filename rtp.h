@@ -13,6 +13,9 @@
 #ifndef JANUS_RTP_H
 #define JANUS_RTP_H
 
+#ifdef __MINGW32__
+#include <winsock2.h>
+#else
 #include <arpa/inet.h>
 #if defined (__MACH__) || defined(__FreeBSD__)
 #include <machine/endian.h>
@@ -22,6 +25,8 @@
 #else
 #include <endian.h>
 #endif
+#endif
+
 #include <inttypes.h>
 #include <string.h>
 #include <glib.h>

@@ -16,6 +16,10 @@
 #include <glib.h>
 #include <jansson.h>
 
+#ifdef __MINGW32__
+#include <sys/types.h>
+#endif
+
 #define JANUS_JSON_STRING			JSON_STRING
 #define JANUS_JSON_INTEGER			JSON_INTEGER
 #define JANUS_JSON_OBJECT			JSON_OBJECT

@@ -16,6 +16,9 @@
 #ifndef JANUS_RTCP_H
 #define JANUS_RTCP_H
 
+#ifdef __MINGW32__
+#include <winsock2.h>
+#else
 #include <arpa/inet.h>
 #ifdef __MACH__
 #include <machine/endian.h>
@@ -24,6 +27,8 @@
 #else
 #include <endian.h>
 #endif
+#endif
+
 #include <inttypes.h>
 #include <string.h>
 

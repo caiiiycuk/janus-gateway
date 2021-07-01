@@ -1,6 +1,8 @@
 Janus for Windows
 =================
 
+Most work are done by Marcin Sielski in this [PR](https://github.com/meetecho/janus-gateway/pull/597).
+
 ## Compiling
 
 1. Install [MSYS2](https://www.msys2.org/) (follow all steps)
@@ -28,7 +30,6 @@ pacman -S \
 	--disable-all-loggers \
 	--disable-aes-gcm
 ```
-5. run `make`
 
 Janus WebRTC Server
 ===================

@@ -16,7 +16,9 @@
  * \ref protocols
  */
 
+#ifndef __MINGW32__
 #include <netdb.h>
+#endif
 
 #include <gio/gio.h>
 

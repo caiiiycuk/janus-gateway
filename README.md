@@ -1,3 +1,35 @@
+Janus for Windows
+=================
+
+## Compiling
+
+1. Install [MSYS2](https://www.msys2.org/) (follow all steps)
+2. Install additional packages
+```
+pacman -S \
+	mingw-w64-x86_64-glib2 \
+	mingw-w64-x86_64-libnice \
+	mingw-w64-x86_64-libsrtp \
+	mingw-w64-x86_64-libconfig \
+	mingw-w64-x86_64-jansson \
+	mingw-w64-x86_64-dlfcn \
+	gengetopt
+```
+3. run `./autogen.sh`
+4. run 
+```
+./configure \
+	--prefix=/opt/janus \
+	--disable-docs \
+	--disable-data-channels \
+	--disable-all-plugins \
+	--disable-all-transports \
+	--disable-all-handlers \
+	--disable-all-loggers \
+	--disable-aes-gcm
+```
+5. run `make`
+
 Janus WebRTC Server
 ===================
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-brightgreen.svg)](COPYING)

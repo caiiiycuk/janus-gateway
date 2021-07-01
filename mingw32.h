@@ -10,7 +10,7 @@
 #define IFF_RUNNING 0xFFFFFFFF
 #define SO_REUSEPORT SO_REUSEADDR
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 #ifdef SHARED
 #define JANUS_API __declspec(dllexport)
 #else
@@ -146,8 +146,12 @@ JANUS_API int flock (int fd, int operation);
 
 #endif
 
-#ifndef IFNAMSIZ
+#ifndef HAVE_IFNAMSIZ
 #define IFNAMSIZ 16
+#endif
+
+#ifndef HAVE_RELPATH
+JANUS_API char *realpath(const char *restrict path, char *restrict resolved_path);
 #endif
 
 #endif // _MINGW_32_H_

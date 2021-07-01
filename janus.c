@@ -4170,6 +4170,13 @@ gint main(int argc, char *argv[])
 	if(daemonize && use_stdout && !args_info.log_stdout_given) {
 		use_stdout = FALSE;
 	}
+
+#ifdef __MINGW32__
+	if(daemonize) {
+		g_print("MinGW build does not support daemonization\n");
+		exit(1);
+	}
+#else
 	/* Daemonize now, if we need to */
 	if(daemonize) {
 		g_print("Running Janus as a daemon\n");
@@ -4235,6 +4242,7 @@ gint main(int argc, char *argv[])
 		}
 		/* We close stdin/stdout/stderr when initializing the logger */
 	}
+#endif
 
 	/* Was a custom instance name provided? */
 	if(args_info.server_name_given) {

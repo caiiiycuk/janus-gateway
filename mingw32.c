@@ -378,3 +378,9 @@ int __imp_flock (int fd, int operation) {
 }
 
 #endif
+
+#ifndef HAVE_RELPATH
+char *__imp_realpath(const char *restrict path, char *restrict resolved_path) {
+	return _fullpath(resolved_path, path, PATH_MAX);
+}
+#endif

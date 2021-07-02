@@ -87,16 +87,27 @@ darwin*)
 	LDFLAGS="$LDFLAGS -Wl,-export_dynamic"
 	LDFLAGS="$LDFLAGS -L/usr/local/lib -L/usr/local/opt/openssl/lib -L/opt/local/lib -L/usr/local/libsrtp/lib"
 	AM_CONDITIONAL([DARWIN_OS], true)
+	AM_CONDITIONAL([WINDOWS_OS], false)
 ;;
 freebsd*)
 	CFLAGS="$CFLAGS -I/usr/include/openssl"
 	LDFLAGS="$LDFLAGS -Xlinker --export-dynamic"
 	LDFLAGS="$LDFLAGS -L/usr/lib/openssl -lcrypto -lssl -L/usr/local/lib"
 	AM_CONDITIONAL([DARWIN_OS], false)
+	AM_CONDITIONAL([WINDOWS_OS], false)
+;;
+mingw*)
+	CFLAGS="$CFLAGS -DWINVER=0x0A00 -D_WIN32_WINNT=0x0A00 -D_POSIX_C_SOURCE -pipe -mwindows -mconsole"
+	LDFLAGS="$LDFLAGS -Wl,--enable-auto-image-base"
+	LIBS="-lws2_32 -liphlpapi -lmicrohttpd"
+	AM_CONDITIONAL([DARWIN_OS], false)
+	AM_CONDITIONAL([WINDOWS_OS], true)
+	AM_CONDITIONAL([HAS_DTLS_WINDOW_SIZE], true)
 ;;
 *)
 	LDFLAGS="$LDFLAGS -Wl,--export-dynamic"
 	AM_CONDITIONAL([DARWIN_OS], false)
+	AM_CONDITIONAL([WINDOWS_OS], false)
 	AC_DEFINE(HAS_DTLS_WINDOW_SIZE, 1)
 esac
 

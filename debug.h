@@ -91,11 +91,6 @@ do { \
 	if (level > LOG_NONE && level <= LOG_MAX && level <= janus_log_level) { \
 		char janus_log_ts[64] = ""; \
 		char janus_log_src[128] = ""; \
-		if (janus_log_timestamps) { \
-			struct tm janustmresult; \
-			strftime(janus_log_ts, sizeof(janus_log_ts), \
-			         "[%a %b %e %T %Y] ", &janustmresult); \
-		} \
 		if (level == LOG_FATAL || level == LOG_ERR || level == LOG_DBG) { \
 			snprintf(janus_log_src, sizeof(janus_log_src), \
 			         "[%s:%s:%d] ", __FILE__, __FUNCTION__, __LINE__); \

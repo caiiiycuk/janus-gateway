@@ -1,6 +1,9 @@
 Janus for Windows
 =================
 
+This build supports only rest transport and streaming plugin. Yon can't change configuration, because 
+it hardcoded in configuration scripts.
+
 Most work are done by Marcin Sielski in this [PR](https://github.com/meetecho/janus-gateway/pull/597).
 
 ## Compiling
@@ -30,6 +33,7 @@ pacman -S \
 	--disable-all-loggers \
 	--disable-aes-gcm
 ```
+5. run `make`
 
 Janus WebRTC Server
 ===================

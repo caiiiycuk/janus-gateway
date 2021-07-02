@@ -139,9 +139,16 @@ janus_SOURCES = \
 	transports/transport.c \
 	events/eventhandler.h \
 	loggers/logger.h \
+	$(NULL)
+
+if WINDOWS_OS
+janus_SOURCES += \
 	mingw32.c \
 	mingw32.h \
+	transports/janus_http.c \
+	plugins/janus_streaming.c \
 	$(NULL)
+endif
 
 janus_CFLAGS = \
 	$(AM_CFLAGS) \
@@ -174,6 +181,8 @@ janus_cfgconv_SOURCES = \
 	log.c \
 	utils.c \
 	version.c \
+	mingw32.c \
+	mingw32.h \
 	$(NULL)
 
 janus_cfgconv_CFLAGS = \

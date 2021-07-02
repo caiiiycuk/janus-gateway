@@ -35,6 +35,7 @@
 #ifdef __MINGW32__
 #include <mingw32.h>
 #define mkdir g_mkdir
+int g_mkdir(const char *pathname, mode_t mode);
 #endif
 
 gint64 janus_get_monotonic_time(void) {

@@ -700,9 +700,14 @@ rtsp_conn_timeout = connection timeout for cURL (CURLOPT_CONNECTTIMEOUT) call ga
 #include "plugin.h"
 
 #include <errno.h>
+#ifdef __MINGW32__
+#include <fcntl.h>
+#define pipe(fds) _pipe(fds, 1024, _O_BINARY)
+#else
 #include <netdb.h>
 #include <sys/poll.h>
 #include <sys/socket.h>
+#endif
 #include <sys/time.h>
 
 #include <jansson.h>
@@ -793,7 +798,11 @@ static janus_plugin janus_streaming_plugin =
 	);
 
 /* Plugin creator */
+#ifdef __MINGW32__
+janus_plugin *create_plugin_streaming(void) {
+#else
 janus_plugin *create(void) {
+#endif
 	JANUS_LOG(LOG_VERB, "%s created!\n", JANUS_STREAMING_NAME);
 	return &janus_streaming_plugin;
 }

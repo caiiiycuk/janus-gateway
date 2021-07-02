@@ -53,6 +53,8 @@
 #include <endian.h>
 #endif
 
+#else
+#define htons g_htons
 #endif
 
 #include "text2pcap.h"

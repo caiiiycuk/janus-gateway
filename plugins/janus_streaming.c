@@ -798,7 +798,8 @@ static janus_plugin janus_streaming_plugin =
 	);
 
 /* Plugin creator */
-#ifdef __MINGW32__
+#define STATIC_LINK
+#ifdef STATIC_LINK
 janus_plugin *create_plugin_streaming(void) {
 #else
 janus_plugin *create(void) {

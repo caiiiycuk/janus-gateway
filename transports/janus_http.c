@@ -107,7 +107,8 @@ static janus_transport janus_http_transport =
 	);
 
 /* Transport creator */
-#ifdef __MINGW32__
+#define STATIC_LINK
+#ifdef STATIC_LINK
 janus_transport *create_transport_http(void) {
 #else
 janus_transport *create(void) {

@@ -61,7 +61,11 @@
 #ifdef __MINGW32__
 #include <openssl/err.h>
 #include <openssl/ssl.h>
+#define STATIC_LINK
+#endif
 
+#define STATIC_LINK
+#ifdef STATIC_LINK
 janus_transport *create_transport_http(void);
 janus_plugin *create_plugin_streaming(void);
 #endif
@@ -5274,7 +5278,7 @@ gint main(int argc, char *argv[])
 	item = janus_config_get(config, config_plugins, janus_config_type_item, "disable");
 	if(item && item->value)
 		disabled_plugins = g_strsplit(item->value, ",", -1);
-#ifndef __MINGW32__
+#ifndef STATIC_LINK
 	/* Open the shared objects */
 	struct dirent *pluginent = NULL;
 	char pluginpath[1024];
@@ -5326,7 +5330,7 @@ gint main(int argc, char *argv[])
 #endif
 			if(!janus_plugin) {
 				JANUS_LOG(LOG_ERR, "\tCouldn't use function 'create'...\n");
-#ifdef __MINGW32__
+#ifdef STATIC_LINK
 				exit(1);
 #else
 				continue;
@@ -5347,7 +5351,7 @@ gint main(int argc, char *argv[])
 					!janus_plugin->setup_media ||
 					!janus_plugin->hangup_media) {
 				JANUS_LOG(LOG_ERR, "\tMissing some mandatory methods/callbacks, skipping this plugin...\n");
-#ifdef __MINGW32__
+#ifdef STATIC_LINK
                 exit(1);
 #else
                 continue;
@@ -5356,7 +5360,7 @@ gint main(int argc, char *argv[])
 			if(janus_plugin->get_api_compatibility() < JANUS_PLUGIN_API_VERSION) {
 				JANUS_LOG(LOG_ERR, "The '%s' plugin was compiled against an older version of the API (%d < %d), skipping it: update it to enable it again\n",
 					janus_plugin->get_package(), janus_plugin->get_api_compatibility(), JANUS_PLUGIN_API_VERSION);
-#ifdef __MINGW32__
+#ifdef STATIC_LINK
                 exit(1);
 #else
                 continue;
@@ -5364,7 +5368,7 @@ gint main(int argc, char *argv[])
 			}
 			if(janus_plugin->init(&janus_handler_plugin, configs_folder) < 0) {
 				JANUS_LOG(LOG_WARN, "The '%s' plugin could not be initialized\n", janus_plugin->get_package());
-#ifdef __MINGW32__
+#ifdef STATIC_LINK
                 exit(1);
 #else
                 continue;
@@ -5386,7 +5390,7 @@ gint main(int argc, char *argv[])
 			if(plugins == NULL)
 				plugins = g_hash_table_new(g_str_hash, g_str_equal);
 			g_hash_table_insert(plugins, (gpointer)janus_plugin->get_package(), janus_plugin);
-#ifndef __MINGW32__
+#ifndef STATIC_LINK
 			if(plugins_so == NULL)
 				plugins_so = g_hash_table_new(g_str_hash, g_str_equal);
 			g_hash_table_insert(plugins_so, (gpointer)janus_plugin->get_package(), plugin);
@@ -5416,7 +5420,7 @@ gint main(int argc, char *argv[])
 	if(item && item->value)
 		disabled_transports = g_strsplit(item->value, ",", -1);
 	/* Open the shared objects */
-#ifndef __MINGW32__
+#ifndef STATIC_LINK
 	struct dirent *transportent = NULL;
 	char transportpath[1024];
 	while((transportent = readdir(dir))) {
@@ -5468,7 +5472,7 @@ gint main(int argc, char *argv[])
 #endif
 			if(!janus_transport) {
 				JANUS_LOG(LOG_ERR, "\tCouldn't use function 'create'...\n");
-#ifdef __MINGW32__
+#ifdef STATIC_LINK
 				exit(1);
 #else
 				continue;
@@ -5489,7 +5493,7 @@ gint main(int argc, char *argv[])
 					!janus_transport->session_over ||
 					!janus_transport->session_claimed) {
 				JANUS_LOG(LOG_ERR, "\tMissing some mandatory methods/callbacks, skipping this transport plugin...\n");
-#ifdef __MINGW32__
+#ifdef STATIC_LINK
                 exit(1);
 #else
                 continue;
@@ -5498,7 +5502,7 @@ gint main(int argc, char *argv[])
 			if(janus_transport->get_api_compatibility() < JANUS_TRANSPORT_API_VERSION) {
 				JANUS_LOG(LOG_ERR, "The '%s' transport plugin was compiled against an older version of the API (%d < %d), skipping it: update it to enable it again\n",
 					janus_transport->get_package(), janus_transport->get_api_compatibility(), JANUS_TRANSPORT_API_VERSION);
-#ifdef __MINGW32__
+#ifdef STATIC_LINK
                 exit(1);
 #else
                 continue;
@@ -5506,7 +5510,7 @@ gint main(int argc, char *argv[])
 			}
 			if(janus_transport->init(&janus_handler_transport, configs_folder) < 0) {
 				JANUS_LOG(LOG_WARN, "The '%s' plugin could not be initialized\n", janus_transport->get_package());
-#ifdef __MINGW32__
+#ifdef STATIC_LINK
                 exit(1);
 #else
                 dlclose(transport);
@@ -5524,7 +5528,7 @@ gint main(int argc, char *argv[])
 			if(transports == NULL)
 				transports = g_hash_table_new(g_str_hash, g_str_equal);
 			g_hash_table_insert(transports, (gpointer)janus_transport->get_package(), janus_transport);
-#ifndef __MINGW32__
+#ifndef STATIC_LINK
 			if(transports_so == NULL)
 				transports_so = g_hash_table_new(g_str_hash, g_str_equal);
 			g_hash_table_insert(transports_so, (gpointer)janus_transport->get_package(), transport);

@@ -79,7 +79,6 @@ JANUS_VERSION=114
 AC_SUBST(JANUS_VERSION)
 JANUS_VERSION_STRING="0.11.4"
 AC_SUBST(JANUS_VERSION_STRING)
-
 case "$host_os" in
 darwin*)
 	CFLAGS="$CFLAGS -I/usr/local/opt/openssl/include -I/usr/local/include"
@@ -102,7 +101,7 @@ mingw*)
 	LIBS="-lws2_32 -liphlpapi -lmicrohttpd"
 	AM_CONDITIONAL([DARWIN_OS], false)
 	AM_CONDITIONAL([WINDOWS_OS], true)
-	AM_CONDITIONAL([HAS_DTLS_WINDOW_SIZE], true)
+	AC_DEFINE(HAS_DTLS_WINDOW_SIZE, 1)
 ;;
 *)
 	LDFLAGS="$LDFLAGS -Wl,--export-dynamic"

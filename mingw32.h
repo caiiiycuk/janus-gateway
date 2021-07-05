@@ -10,17 +10,8 @@
 #define IFF_RUNNING 0xFFFFFFFF
 #define SO_REUSEPORT SO_REUSEADDR
 
-#ifdef _WIN32
-#ifdef SHARED
-#define JANUS_API __declspec(dllexport)
-#else
-#define JANUS_API __declspec(dllimport)
-#endif
-#define JANUS_LOCAL JANUS_API
-#else
 #define JANUS_API
 #define JANUS_LOCAL static
-#endif
 
 #ifndef __BIG_ENDIAN
 #define __BIG_ENDIAN __ORDER_BIG_ENDIAN__

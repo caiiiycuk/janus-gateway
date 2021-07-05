@@ -6,7 +6,7 @@
 
 #ifndef HAVE_POLL
 
-int __imp_poll(struct pollfd *fds, nfds_t nfds, int timeout) {
+int poll(struct pollfd *fds, nfds_t nfds, int timeout) {
 
 	return WSAPoll(fds, nfds, timeout);
 
@@ -58,7 +58,7 @@ static struct sockaddr *dupaddr(const sockaddr_gen * src)
 	return (struct sockaddr *) d;
 }
 
-int __imp_getifaddrs(struct ifaddrs **ifpp)
+int getifaddrs(struct ifaddrs **ifpp)
 {
 	SOCKET s = INVALID_SOCKET;
 	size_t il_len = 8192;
@@ -148,7 +148,7 @@ _exit:
 
 #ifndef HAVE_FREEIFADDRS
 
-void __imp_freeifaddrs(struct ifaddrs *ifp) {
+void freeifaddrs(struct ifaddrs *ifp) {
 	struct ifaddrs *p, *q;
 
 	for(p = ifp; p; ) {
@@ -202,7 +202,7 @@ void __imp_freeifaddrs(struct ifaddrs *ifp) {
 
 #ifndef HAVE_STRCASESTR
 
-char *__imp_strcasestr(const char *haystack, const char *needle) {
+char *strcasestr(const char *haystack, const char *needle) {
 	unsigned char lcn, ucn;
 	size_t i;
 
@@ -316,7 +316,7 @@ static BOOL do_unlock (HANDLE h) {
 }
 
 /* Now our BSD-like flock operation. */
-int __imp_flock (int fd, int operation) {
+int flock (int fd, int operation) {
 	HANDLE h = (HANDLE) _get_osfhandle (fd);
 	DWORD res;
 	int non_blocking;
@@ -380,7 +380,7 @@ int __imp_flock (int fd, int operation) {
 #endif
 
 #ifndef HAVE_RELPATH
-char *__imp_realpath(const char *restrict path, char *restrict resolved_path) {
+char *realpath(const char *restrict path, char *restrict resolved_path) {
 	return _fullpath(resolved_path, path, PATH_MAX);
 }
 #endif
